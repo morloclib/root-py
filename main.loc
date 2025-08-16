@@ -1,6 +1,6 @@
-module pybase (*)
+module base-py (*)
 
-import conventions
+import base
 
 source py from "core.py"
  ( "mlc_run" as run
