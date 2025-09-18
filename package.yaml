@@ -1,11 +1,11 @@
-name: base-py
+name: root-py
 version: 0.0.0
-homepage: https://github.com/morloclib/base-py
-synopsis: Base types and functions for Python3
+homepage: https://github.com/morloclib/root-py
+synopsis: Python3 implementations for root functions
 description: Lots of detail about all this
 category: language-base
 license: MIT
 author: "Zebulun Arendsee"
-maintainer: "zbwrnz@gmail.com"
-github: https://github.com/morloclib/base-py
-bug-reports: https://github.com/morloclib/base-py
+maintainer: "z@morloc.io"
+github: https://github.com/morloclib/root-py
+bug-reports: https://github.com/morloclib/root-py
