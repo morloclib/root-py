@@ -31,6 +31,12 @@ def morloc_ifelse(cond, x, y):
     else:
         return(y)
 
+def morloc_branch(cond, fa, fb, x):
+    if(cond(x)):
+        return fa(x)
+    else:
+        return fb(x)
+
 def morloc_enumerateWith(f, xs):
   for (x,i) in enumerate(xs):
     yield f(x,i)
