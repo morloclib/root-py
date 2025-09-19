@@ -4,8 +4,6 @@ import root
 
 idpy a :: a -> a
 
-zipWith a b c :: (a -> b -> c) -> [a] -> [b] -> [c] 
-
 source Py from "core.py"
     ( "morloc_idpy" as idpy
     , "morloc_zipWith" as zipWith
