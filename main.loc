@@ -17,9 +17,16 @@ source Py from "core.py"
     , "morloc_snd3" as snd3
     , "morloc_thr3" as thr3
     , "morloc_ifelse" as ifelse
+    , "morloc_branch" as branch
     , "morloc_not" as not
     , "morloc_and" as and
     , "morloc_or" as or
+    , "morloc_head" as head
+    , "morloc_tail" as tail
+    , "morloc_last" as last
+    , "morloc_take" as take
+    , "morloc_drop" as drop
+    , "morloc_init" as init
     )
 
 -- This approach of defining generic instances reduces repetition when every
@@ -76,7 +83,7 @@ instance Foldable List where
   source Py from "core.py" ("morloc_fold" as fold)
 
 instance Functor List where
-  source Py from "core.py" ("morloc_map_list" as map)
+  source Py from "core.py" ("morloc_map" as map)
 
 instance Sequence List where
   empty = []
