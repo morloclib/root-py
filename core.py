@@ -4,6 +4,9 @@
 import time
 import copy
 
+def morloc_zipWith(f, xs, ys):
+    return list(map(f, xs, ys))
+
 def morloc_idpy(x):
     return x
 
