@@ -2,8 +2,11 @@ module root-py (*)
 
 import root
 
+idpy a :: a -> a
+
 source Py from "root.py"
-    ( "morloc_fst" as fst
+    ( "morloc_idpy" as idpy
+    , "morloc_fst" as fst
     , "morloc_snd" as snd
     , "morloc_toFst" as toFst
     , "morloc_toSnd" as toSnd
