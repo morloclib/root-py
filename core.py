@@ -23,7 +23,10 @@ def morloc_id(x):
   return x
 
 def morloc_at(i, xs):
-  return xs[i]
+    return xs[i]
+
+def morloc_slice(i, j, xs):
+    return xs[i:j]
 
 def morloc_ifelse(cond, x, y):
     if cond:

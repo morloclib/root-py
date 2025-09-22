@@ -97,9 +97,3 @@ def morloc_fold(fbab, b, fa):
 
 def morloc_map_list(f, xs):
     return list(map(f, xs))
-
-def morloc_at(i, xs):
-    return xs[i]
-
-def morloc_slice(i, j, xs):
-    return xs[i:j]
