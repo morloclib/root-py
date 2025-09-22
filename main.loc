@@ -1,6 +1,7 @@
 module root-py (*)
 
 import root
+import root.test (test)
 
 idpy a :: a -> a
 
