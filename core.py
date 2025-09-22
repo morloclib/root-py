@@ -77,7 +77,7 @@ def morloc_snd(x):
 def morloc_fst3(x):
   return x[0]
 
-def morloc_snd(x):
+def morloc_snd3(x):
   return x[1]
 
 def morloc_thr3(x):
