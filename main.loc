@@ -1,7 +1,6 @@
 module root-py (*)
 
 import root
-import root.test (test)
 
 idpy a :: a -> a
 
@@ -10,8 +9,6 @@ source Py from "core.py"
     , "morloc_zipWith" as zipWith
     , "morloc_fst" as fst
     , "morloc_snd" as snd
-    , "morloc_toFst" as toFst
-    , "morloc_toSnd" as toSnd
     , "morloc_fst3" as fst3
     , "morloc_snd3" as snd3
     , "morloc_thr3" as thr3
