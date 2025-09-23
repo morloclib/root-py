@@ -2,6 +2,22 @@ module root-py (*)
 
 import root
 
+type Py => Filename = "str"
+type Py => Unit = "None"
+type Py => Real = "float"
+type Py => Int = "int"
+type Py => Str = "str"
+type Py => Bool = "bool"
+type Py => (Map a b) = "dict" a b
+type Py => (List a) = "list" a
+type Py => (Tuple2 a b) = "tuple" a b
+type Py => (Tuple3 a b c) = "tuple" a b c
+type Py => (Tuple4 a b c d) = "tuple" a b c d
+type Py => (Tuple5 a b c d e) = "tuple" a b c d e
+type Py => (Tuple6 a b c d e f) = "tuple" a b c d e f
+type Py => (Tuple7 a b c d e f g) = "tuple" a b c d e f g
+type Py => (Tuple8 a b c d e f g h) = "tuple" a b c d e f g h
+
 idpy a :: a -> a
 
 source Py from "core.py"
