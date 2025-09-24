@@ -1,4 +1,4 @@
-module test (test)
+module test-root-py (test)
 
 import root.test (test)
 import root-py
