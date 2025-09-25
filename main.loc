@@ -106,8 +106,6 @@ instance Sequence List where
 -- be exported.
 -------------------------------------------------------------------------------
 
-type Py => (Map key val) = "dict" key val
-
 instance Packable ([key],[val]) (Map key val) where
   source py from "data.py"
    ( "morloc_packMap" as pack
