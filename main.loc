@@ -2,7 +2,6 @@ module root-py (*)
 
 import root
 
-type Py => Filename = "str"
 type Py => Unit = "None"
 type Py => Real = "float"
 type Py => Int = "int"
