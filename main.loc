@@ -22,11 +22,6 @@ idpy a :: a -> a
 source Py from "core.py"
     ( "morloc_idpy" as idpy
     , "morloc_zipWith" as zipWith
-    , "morloc_fst" as fst
-    , "morloc_snd" as snd
-    , "morloc_fst3" as fst3
-    , "morloc_snd3" as snd3
-    , "morloc_thr3" as thr3
     , "morloc_ifelse" as ifelse
     , "morloc_branch" as branch
     , "morloc_not" as not

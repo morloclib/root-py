@@ -71,21 +71,6 @@ def morloc_append(xs, x):
 def morloc_filter(f, xs):
     return [x for x in xs if f(x)]
 
-def morloc_fst(x):
-  return x[0]
-
-def morloc_snd(x):
-  return x[1]
-
-def morloc_fst3(x):
-  return x[0]
-
-def morloc_snd3(x):
-  return x[1]
-
-def morloc_thr3(x):
-  return x[2]
-
 #  onFst :: (a -> a') -> (a, b) -> (a', b)
 def morloc_onFst(f, x):
     return (f(x[0]), x[1])
