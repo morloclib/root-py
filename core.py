@@ -28,6 +28,12 @@ def morloc_at(i, xs):
 def morloc_slice(i, j, xs):
     return xs[i:j]
 
+def morloc_reverse(xs):
+    return list(reversed(xs))
+
+def morloc_sort(xs):
+    return sorted(xs)
+
 def morloc_ifelse(cond, x, y):
     if cond:
         return(x)
