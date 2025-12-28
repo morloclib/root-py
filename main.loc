@@ -95,6 +95,8 @@ instance Sequence List where
     , "morloc_slice" as slice
     )
 
+instance Show a where
+  source Py ("str" as show)
 
 -------------------------------------------------------------------------------
 --                 Pack and Unpack internal functions
