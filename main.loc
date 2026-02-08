@@ -25,8 +25,8 @@ source Py from "core.py"
     , "morloc_ifelse" as ifelse
     , "morloc_branch" as branch
     , "morloc_not" as not
-    , "morloc_and" as and
-    , "morloc_or" as or
+    , "morloc_and" as (&&)
+    , "morloc_or" as (||)
     , "morloc_reverse" as reverse
     , "morloc_sort" as sort
     , "morloc_filter" as filter
@@ -38,35 +38,35 @@ source Py from "core.py"
 -- things cannot be meaningfully equated. I need a better system.
 instance Eq a where
   -- this will work for any type that defines a '==' operator
-  source Py from "core.py" ("morloc_eq" as eq)
+  source Py from "core.py" ("morloc_eq" as (==))
 
 instance Ord a where
   -- this will work for any type that defines a '<=' operator
-  source Py from "core.py" ("morloc_le" as le)
+  source Py from "core.py" ("morloc_le" as (<=))
 
 instance Integral Int where
   source Py from "core.py"
     ( "morloc_neg" as neg
-    , "morloc_add" as add
-    , "morloc_sub" as sub
-    , "morloc_mul" as mul
+    , "morloc_add" as (+)
+    , "morloc_sub" as (-)
+    , "morloc_mul" as (*)
     )
   zero = 0
 
 instance Integral Real where
   source Py from "core.py"
     ( "morloc_neg" as neg
-    , "morloc_add" as add
-    , "morloc_sub" as sub
-    , "morloc_mul" as mul
+    , "morloc_add" as (+)
+    , "morloc_sub" as (-)
+    , "morloc_mul" as (*)
     )
   zero = 0.0
 
 instance Numeric Real where
   source Py from "core.py"
     ( "morloc_inv" as inv
-    , "morloc_div" as div
-    , "morloc_exp" as exp
+    , "morloc_div" as (/)
+    , "morloc_exp" as (**)
     , "morloc_log" as log
     )
   one = 1.0
@@ -74,11 +74,11 @@ instance Numeric Real where
 
 instance Monoid Str where
   mempty = ""
-  source Py from "core.py" ("morloc_add" as mappend)
+  source Py from "core.py" ("morloc_add" as (<>))
 
 instance Monoid (List a) where
   mempty = []
-  source Py from "core.py" ("morloc_add" as mappend)
+  source Py from "core.py" ("morloc_add" as (<>))
 
 
 instance Foldable List where
