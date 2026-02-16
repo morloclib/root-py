@@ -1,26 +1,78 @@
-# imports a bit of a problem, the incur a startup cost even if they are not
-# used. I need to find a way to minimize this by making them load lazily. Or
-# perhaps by "shaking the tree" and/or compiling the code.
-import time
-import copy
-
-def morloc_zipWith(f, xs, ys):
-    return list(map(f, xs, ys))
+import math
+import functools
 
 def morloc_idpy(x):
     return x
 
-def morloc_elem(x, xs):
-    return x in xs
+# --- Boolean operations ---
 
-def morloc_run(f):
-    return f()
+def morloc_not(x):
+    return not x
+
+def morloc_and(x, y):
+    return x and y
+
+def morloc_or(x, y):
+    return x or y
+
+# --- Comparison operations ---
+
+def morloc_eq(x, y):
+    return x == y
+
+def morloc_le(x, y):
+    return x <= y
+
+# --- Control flow ---
+
+def morloc_ifelse(cond, x, y):
+    if cond:
+        return x
+    else:
+        return y
+
+def morloc_branch(cond, fa, fb, x):
+    if cond(x):
+        return fa(x)
+    else:
+        return fb(x)
+
+# --- Arithmetic operations ---
 
 def morloc_neg(x):
-  return (-1) * x
+    return (-1) * x
 
-def morloc_id(x):
-  return x
+def morloc_abs(x):
+    return abs(x)
+
+def morloc_add(a, b):
+    return a + b
+
+def morloc_sub(a, b):
+    return a - b
+
+def morloc_mul(a, b):
+    return a * b
+
+def morloc_intdiv(a, b):
+    return a // b
+
+def morloc_mod(a, b):
+    return a % b
+
+def morloc_inv(x):
+    return 1 / x
+
+def morloc_div(a, b):
+    return a / b
+
+def morloc_pow(x, y):
+    return x ** y
+
+def morloc_ln(x):
+    return math.log(x)
+
+# --- Sequence operations ---
 
 def morloc_at(i, xs):
     return xs[i]
@@ -34,127 +86,86 @@ def morloc_reverse(xs):
 def morloc_sort(xs):
     return sorted(xs)
 
-def morloc_ifelse(cond, x, y):
-    if cond:
-        return(x)
-    else:
-        return(y)
-
-def morloc_branch(cond, fa, fb, x):
-    if(cond(x)):
-        return fa(x)
-    else:
-        return fb(x)
-
-def morloc_enumerateWith(f, xs):
-  for (x,i) in enumerate(xs):
-    yield f(x,i)
-
-def morloc_fold(f, b, xs):
-  for x in xs:
-    b = f(b, x)
-  return b
-
-def morloc_add(a,b):
-  return a+b
-
-def morloc_sub(a,b):
-  return a-b
-
-def morloc_mul(a,b):
-  return a*b
-
-def morloc_div(a,b):
-  return a/b
-
-def morloc_map(f, *args):
-  return list(map(f, *args))
-
-def morloc_append(xs, x):
-    xs.append(x)
-    return xs
+def morloc_sortBy(cmp, xs):
+    def cmp_func(a, b):
+        if cmp(a, b):
+            return -1
+        elif cmp(b, a):
+            return 1
+        else:
+            return 0
+    return sorted(xs, key=functools.cmp_to_key(cmp_func))
 
 def morloc_filter(f, xs):
     return [x for x in xs if f(x)]
 
-#  onFst :: (a -> a') -> (a, b) -> (a', b)
-def morloc_onFst(f, x):
-    return (f(x[0]), x[1])
+def morloc_map(f, *args):
+    return list(map(f, *args))
 
-#  onSnd :: (b -> b') -> (a, b) -> (a, b')
-def morloc_onSnd(f, x):
-    return (x[0], f(x[1]))
+def morloc_zipWith(f, xs, ys):
+    return list(map(f, xs, ys))
 
-#  concat :: [[a]] -> [a]
-def morloc_concat(xss):
-    ys = []
-    for xs in xss: 
-        ys.extend(xs)
-    return ys
-
-#  sleep py :: Real -> a -> a
-def morloc_sleep(n, a):
-    time.sleep(n)
-    return a
-
-#  shard py :: Int -> [a] -> [[a]]
-def morloc_shard(chunkSize, xs):
-    xss = [[]]
+def morloc_fold(f, b, xs):
     for x in xs:
-        if len(xss[-1]) < chunkSize:
-            xss[-1].append(x)
+        b = f(b, x)
+    return b
+
+def morloc_unzip(xs):
+    if not xs:
+        return ([], [])
+    return ([a for a, b in xs], [b for a, b in xs])
+
+def morloc_replicate(n, x):
+    return [x] * n
+
+def morloc_takeWhile(f, xs):
+    result = []
+    for x in xs:
+        if not f(x):
+            break
+        result.append(x)
+    return result
+
+def morloc_dropWhile(f, xs):
+    dropping = True
+    result = []
+    for x in xs:
+        if dropping and f(x):
+            continue
+        dropping = False
+        result.append(x)
+    return result
+
+def morloc_partition(f, xs):
+    yes = []
+    no = []
+    for x in xs:
+        if f(x):
+            yes.append(x)
         else:
-            xss.append([x])
-    return xss
+            no.append(x)
+    return (yes, no)
 
-#  [a] -> a
-def morloc_head(xs):
-    if(len(xs) == 0):
-        raise ValueError("Empty list in head operation")
-    else:
-        return xs[0]
+def morloc_scanl(f, init, xs):
+    result = [init]
+    acc = init
+    for x in xs:
+        acc = f(acc, x)
+        result.append(acc)
+    return result
 
-# [a]_{n} -> [a]_{n-1}
-def morloc_tail(xs):
-    if(len(xs) == 0):
-        raise ValueError("Empty list in tail operation")
-    else:
-        return xs[1:]
+def morloc_intersperse(sep, xs):
+    result = []
+    for i, x in enumerate(xs):
+        if i > 0:
+            result.append(sep)
+        result.append(x)
+    return result
 
-# [a] -> a
-def morloc_last(xs):
-    if(len(xs) == 0):
-        raise ValueError("Empty list in last operation")
-    else:
-        return xs[-1]
+def morloc_enumerate(xs):
+    return [(i, x) for i, x in enumerate(xs)]
 
-# i:Int -> [a]_{n>i} -> [a]_{n=i}
-def morloc_take(i, xs): 
-    return xs[0:i]
-
-# i:Int -> [a]_{n; n>i} -> [a]_{m; m <= n-i}
-def morloc_drop(i, xs):
-    return xs[i:]
-
-#  [a]_{n>i} -> [a]_{n-i}
-def morloc_init(xs):
-    if(len(xs) == 0):
-        raise ValueError("Empty list in init operation")
-    else:
-        return xs[0:-1]
-
-#  join py :: [a] -> [a] -> [a]
-def morloc_join(xs, ys):
-    # this function should not mutate the data
-    xsCopy = copy.copy(xs)
-    xsCopy.extend(ys)
-    return xsCopy
-
-def morloc_filterKey(cond, d):
-    return {k:v for (k, v) in d.items() if cond(k)}
-
-def morloc_filterVal(cond, d):
-    return {k:v for (k, v) in d.items() if cond(v)}
+# --- Map operations ---
 
 def morloc_keys(d):
     return list(d.keys())
@@ -162,43 +173,30 @@ def morloc_keys(d):
 def morloc_vals(d):
     return list(d.values())
 
-def morloc_gt(x, y):
-	return x > y
+def morloc_lookup(key, m):
+    return m[key]
 
-def morloc_lt(x, y):
-	return x < y
+def morloc_insert(key, val, m):
+    result = dict(m)
+    result[key] = val
+    return result
 
-def morloc_ge(x, y):
-	return x >= y
+def morloc_delete(key, m):
+    result = dict(m)
+    result.pop(key, None)
+    return result
 
-def morloc_le(x, y):
-	return x <= y
+def morloc_from_list(xs):
+    return dict(xs)
 
-def morloc_eq(x, y):
-	return x == y
+def morloc_to_list(m):
+    return list(m.items())
 
-def morloc_ne(x, y):
-	return x != y
+def morloc_map_key(f, m):
+    return {f(k): v for k, v in m.items()}
 
-def morloc_not(x):
-	return (not x)
+def morloc_map_val(f, m):
+    return {k: f(v) for k, v in m.items()}
 
-def morloc_and(x, y):
-	return (x and y)
-
-def morloc_or(x, y):
-	return (x or y)
-
-def morloc_readMap(filename):
-    x = dict()
-    with open(filename, "r") as f:
-        for line in f.readlines():
-            (k,v) = line.split("\t")
-            x[k.strip()] = v.strip()
-        return x
-
-def morloc_seq(a, b):
-    return b
-
-def morloc_const(a, b):
-    return a
+def morloc_filter_map(f, m):
+    return {k: v for k, v in m.items() if f(k, v)}
