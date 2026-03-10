@@ -25,12 +25,6 @@ def morloc_le(x, y):
 
 # --- Control flow ---
 
-def morloc_ifelse(cond, x, y):
-    if cond:
-        return x
-    else:
-        return y
-
 def morloc_branch(cond, fa, fb, x):
     if cond(x):
         return fa(x)
@@ -110,6 +104,20 @@ def morloc_fold(f, b, xs):
         b = f(b, x)
     return b
 
+def morloc_fold1(f, xs):
+    acc = xs[0]
+    for x in xs[1:]:
+        acc = f(acc, x)
+    return acc
+
+def morloc_safeFold1(f, xs):
+    if not xs:
+        return None
+    acc = xs[0]
+    for x in xs[1:]:
+        acc = f(acc, x)
+    return acc
+
 def morloc_unzip(xs):
     if not xs:
         return ([], [])
@@ -165,38 +173,114 @@ def morloc_intersperse(sep, xs):
 def morloc_enumerate(xs):
     return [(i, x) for i, x in enumerate(xs)]
 
-# --- Map operations ---
+# --- Stack operations ---
 
-def morloc_keys(d):
-    return list(d.keys())
+def morloc_cons(x, xs):
+    return [x] + xs
 
-def morloc_vals(d):
-    return list(d.values())
+def morloc_uncons(xs):
+    return (xs[0], xs[1:])
 
-def morloc_lookup(key, m):
-    return m[key]
+# --- Queue operations ---
 
-def morloc_insert(key, val, m):
-    result = dict(m)
-    result[key] = val
+def morloc_snoc(xs, x):
+    return xs + [x]
+
+def morloc_unsnoc(xs):
+    return (xs[:-1], xs[-1])
+
+# --- New list operations ---
+
+def morloc_iterate(n, f, x):
+    result = []
+    for _ in range(n):
+        result.append(x)
+        x = f(x)
     return result
 
-def morloc_delete(key, m):
-    result = dict(m)
-    result.pop(key, None)
+def morloc_groupBy(eq, xs):
+    if not xs:
+        return []
+    result = []
+    group = [xs[0]]
+    for i in range(1, len(xs)):
+        if eq(xs[i-1], xs[i]):
+            group.append(xs[i])
+        else:
+            result.append(group)
+            group = [xs[i]]
+    result.append(group)
     return result
 
-def morloc_from_list(xs):
-    return dict(xs)
+def morloc_find(f, xs):
+    for x in xs:
+        if f(x):
+            return x
+    return None
 
-def morloc_to_list(m):
-    return list(m.items())
+def morloc_unique(xs):
+    seen = set()
+    result = []
+    for x in xs:
+        if x not in seen:
+            seen.add(x)
+            result.append(x)
+    return result
 
-def morloc_map_key(f, m):
-    return {f(k): v for k, v in m.items()}
+def morloc_groupSort(xs):
+    groups = {}
+    order = []
+    for k, v in xs:
+        if k not in groups:
+            groups[k] = []
+            order.append(k)
+        groups[k].append(v)
+    order.sort()
+    return [(k, groups[k]) for k in order]
 
-def morloc_map_val(f, m):
-    return {k: f(v) for k, v in m.items()}
+def morloc_range(a, b):
+    if a > b:
+        return []
+    return list(range(a, b + 1))
 
-def morloc_filter_map(f, m):
-    return {k: v for k, v in m.items() if f(k, v)}
+def morloc_rangeStep(a, b, step):
+    if a > b:
+        return []
+    return list(range(a, b + 1, step))
+
+# --- Readable operations ---
+
+def morloc_read_int(s):
+    try:
+        return int(s)
+    except (ValueError, TypeError):
+        return None
+
+def morloc_read_real(s):
+    try:
+        return float(s)
+    except (ValueError, TypeError):
+        return None
+
+def morloc_read_str(s):
+    return s
+
+def morloc_read_bool(s):
+    if s in ("true", "True", "TRUE"):
+        return True
+    if s in ("false", "False", "FALSE"):
+        return False
+    return None
+
+# --- Sequence conversions ---
+# In Python, all sequence types map to list, so these are identity functions
+
+def morloc_toDeque(xs):
+    return list(xs)
+
+def morloc_toVector(xs):
+    return list(xs)
+
+def morloc_toArray(xs):
+    return list(xs)
+
