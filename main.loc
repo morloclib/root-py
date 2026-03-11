@@ -58,45 +58,45 @@ instance Eq a where
 instance Ord a where
   source Py from "core.py" ("morloc_le" as (<=))
 
-instance Integral Int where
+instance Integral Int
+                , Int8
+                , Int16
+                , Int32
+                , Int64
+                , UInt8
+                , UInt16
+                , UInt32
+                , UInt64
+                , Real
+                , Float32
+                , Float64 where
+  %inline
   source Py from "core.py"
     ( "morloc_neg" as neg
     , "morloc_abs" as abs
-    , "morloc_add" as (+)
-    , "morloc_sub" as (-)
-    , "morloc_mul" as (*)
-    , "morloc_intdiv" as (//)
-    , "morloc_mod" as (%)
+    , (+) , (-) , (*) , (//) , (%), (**)
     )
   zero = 0
 
-instance Integral Real where
-  source Py from "core.py"
-    ( "morloc_neg" as neg
-    , "morloc_abs" as abs
-    , "morloc_add" as (+)
-    , "morloc_sub" as (-)
-    , "morloc_mul" as (*)
-    , "morloc_div" as (//)
-    , "morloc_mod" as (%)
-    )
-  zero = 0.0
-
-instance Numeric Real where
+instance Numeric Real
+               , Float32
+               , Float64 where
+  %inline
   source Py from "core.py"
     ( "morloc_inv" as inv
-    , "morloc_div" as (/)
-    , "morloc_pow" as (**)
     , "morloc_ln" as ln
+    , (/)
     )
 
 instance Semigroup Str where
+  %inline
   source Py from "core.py" ("morloc_add" as (<>))
 
 instance Monoid Str where
   mempty = ""
 
 instance Semigroup (List a) where
+  %inline
   source Py from "core.py" ("morloc_add" as (<>))
 
 instance Monoid (List a) where
@@ -115,18 +115,21 @@ instance Functor List where
   source Py from "core.py" ("morloc_map" as map)
 
 instance Indexed List where
+  %inline
   source Py from "core.py"
     ( "morloc_at" as at
     , "morloc_slice" as slice
     )
 
 instance Stack List where
+  %inline
   source Py from "core.py"
     ( "morloc_cons" as cons
     , "morloc_uncons" as uncons
     )
 
 instance Queue List where
+  %inline
   source Py from "core.py"
     ( "morloc_snoc" as snoc
     , "morloc_unsnoc" as unsnoc
@@ -145,18 +148,21 @@ instance Functor Deque where
   source Py from "core.py" ("morloc_map" as map)
 
 instance Stack Deque where
+  %inline
   source Py from "core.py"
     ( "morloc_cons" as cons
     , "morloc_uncons" as uncons
     )
 
 instance Queue Deque where
+  %inline
   source Py from "core.py"
     ( "morloc_snoc" as snoc
     , "morloc_unsnoc" as unsnoc
     )
 
 instance Semigroup (Deque a) where
+  %inline
   source Py from "core.py" ("morloc_add" as (<>))
 
 
@@ -172,18 +178,21 @@ instance Functor Vector where
   source Py from "core.py" ("morloc_map" as map)
 
 instance Indexed Vector where
+  %inline
   source Py from "core.py"
     ( "morloc_at" as at
     , "morloc_slice" as slice
     )
 
 instance Queue Vector where
+  %inline
   source Py from "core.py"
     ( "morloc_snoc" as snoc
     , "morloc_unsnoc" as unsnoc
     )
 
 instance Semigroup (Vector a) where
+  %inline
   source Py from "core.py" ("morloc_add" as (<>))
 
 
@@ -199,6 +208,7 @@ instance Functor Array where
   source Py from "core.py" ("morloc_map" as map)
 
 instance Indexed Array where
+  %inline
   source Py from "core.py"
     ( "morloc_at" as at
     , "morloc_slice" as slice
