@@ -21,6 +21,7 @@ type Py => (Tuple8 a b c d e f g h) = "tuple" a b c d e f g h
 
 idpy a :: a -> a
 
+%inline
 source Py from "core.py"
     ( "morloc_idpy" as idpy
     , "morloc_branch" as branch
@@ -59,17 +60,14 @@ instance Ord a where
   source Py from "core.py" ("morloc_le" as (<=))
 
 instance Integral Int
-                , Int8
-                , Int16
-                , Int32
-                , Int64
-                , UInt8
-                , UInt16
-                , UInt32
-                , UInt64
-                , Real
-                , Float32
-                , Float64 where
+       , Integral Int8
+       , Integral Int16
+       , Integral Int32
+       , Integral Int64
+       , Integral UInt8
+       , Integral UInt16
+       , Integral UInt32
+       , Integral UInt64 where
   %inline
   source Py from "core.py"
     ( "morloc_neg" as neg
@@ -78,9 +76,20 @@ instance Integral Int
     )
   zero = 0
 
+instance Integral Real
+       , Integral Float32
+       , Integral Float64 where
+  %inline
+  source Py from "core.py"
+    ( "morloc_neg" as neg
+    , "morloc_abs" as abs
+    , (+) , (-) , (*) , (//) , (%), (**)
+    )
+  zero = 0.0
+
 instance Numeric Real
-               , Float32
-               , Float64 where
+       , Numeric Float32
+       , Numeric Float64 where
   %inline
   source Py from "core.py"
     ( "morloc_inv" as inv
@@ -95,127 +104,65 @@ instance Semigroup Str where
 instance Monoid Str where
   mempty = ""
 
-instance Semigroup (List a) where
-  %inline
-  source Py from "core.py" ("morloc_add" as (<>))
-
-instance Monoid (List a) where
-  mempty = []
-
 
 -- List instances
-instance Foldable List where
+
+instance Semigroup List
+       , Semigroup Deque
+       , Semigroup Vector
+       , Semigroup Array where
+  %inline
+  source Py from "core.py" ((+) as (<>))
+
+instance Monoid (List a)
+       , Monoid (Deque a)
+       , Monoid (Vector a)
+       , Monoid (Array a) where
+  mempty = []
+
+instance Functor List
+       , Functor Deque
+       , Functor Vector
+       , Functor Array where
+  %inline
+  source Py from "core.py" ("morloc_map" as map)
+
+instance Foldable List
+       , Foldable Deque
+       , Foldable Vector
+       , Foldable Array where
+  %inline
   source Py from "core.py"
     ( "morloc_fold" as fold
     , "morloc_fold1" as fold1
     , "morloc_safeFold1" as safeFold1
     )
 
-instance Functor List where
-  source Py from "core.py" ("morloc_map" as map)
-
-instance Indexed List where
+instance Indexed List
+       , Indexed Vector
+       , Indexed Array where
   %inline
   source Py from "core.py"
     ( "morloc_at" as at
     , "morloc_slice" as slice
     )
 
-instance Stack List where
+instance Stack List
+       , Stack Deque where
   %inline
   source Py from "core.py"
     ( "morloc_cons" as cons
     , "morloc_uncons" as uncons
     )
 
-instance Queue List where
+instance Queue List
+       , Queue Vector
+       , Queue Deque where
   %inline
   source Py from "core.py"
     ( "morloc_snoc" as snoc
     , "morloc_unsnoc" as unsnoc
     )
-
-
--- Deque instances (Python uses list for all sequence types)
-instance Foldable Deque where
-  source Py from "core.py"
-    ( "morloc_fold" as fold
-    , "morloc_fold1" as fold1
-    , "morloc_safeFold1" as safeFold1
-    )
-
-instance Functor Deque where
-  source Py from "core.py" ("morloc_map" as map)
-
-instance Stack Deque where
-  %inline
-  source Py from "core.py"
-    ( "morloc_cons" as cons
-    , "morloc_uncons" as uncons
-    )
-
-instance Queue Deque where
-  %inline
-  source Py from "core.py"
-    ( "morloc_snoc" as snoc
-    , "morloc_unsnoc" as unsnoc
-    )
-
-instance Semigroup (Deque a) where
-  %inline
-  source Py from "core.py" ("morloc_add" as (<>))
-
-
--- Vector instances (Python uses list for all sequence types)
-instance Foldable Vector where
-  source Py from "core.py"
-    ( "morloc_fold" as fold
-    , "morloc_fold1" as fold1
-    , "morloc_safeFold1" as safeFold1
-    )
-
-instance Functor Vector where
-  source Py from "core.py" ("morloc_map" as map)
-
-instance Indexed Vector where
-  %inline
-  source Py from "core.py"
-    ( "morloc_at" as at
-    , "morloc_slice" as slice
-    )
-
-instance Queue Vector where
-  %inline
-  source Py from "core.py"
-    ( "morloc_snoc" as snoc
-    , "morloc_unsnoc" as unsnoc
-    )
-
-instance Semigroup (Vector a) where
-  %inline
-  source Py from "core.py" ("morloc_add" as (<>))
-
-
--- Array instances (Python uses list for all sequence types)
-instance Foldable Array where
-  source Py from "core.py"
-    ( "morloc_fold" as fold
-    , "morloc_fold1" as fold1
-    , "morloc_safeFold1" as safeFold1
-    )
-
-instance Functor Array where
-  source Py from "core.py" ("morloc_map" as map)
-
-instance Indexed Array where
-  %inline
-  source Py from "core.py"
-    ( "morloc_at" as at
-    , "morloc_slice" as slice
-    )
-
-instance Semigroup (Array a) where
-  source Py from "core.py" ("morloc_add" as (<>))
 
 
 instance Show a where
