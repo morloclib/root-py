@@ -99,7 +99,7 @@ instance Numeric Real
 
 instance Semigroup Str where
   %inline
-  source Py from "core.py" ("morloc_add" as (<>))
+  source Py ((+) as (<>))
 
 instance Monoid Str where
   mempty = ""
@@ -107,17 +107,15 @@ instance Monoid Str where
 
 -- List instances
 
-instance Semigroup List
-       , Semigroup Deque
-       , Semigroup Vector
-       , Semigroup Array where
+instance Semigroup (List a)
+       , Semigroup (Deque a)
+       , Semigroup (Vector a) where
   %inline
-  source Py from "core.py" ((+) as (<>))
+  source Py ((+) as (<>))
 
 instance Monoid (List a)
        , Monoid (Deque a)
-       , Monoid (Vector a)
-       , Monoid (Array a) where
+       , Monoid (Vector a) where
   mempty = []
 
 instance Functor List
