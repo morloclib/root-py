@@ -8,15 +8,15 @@ type Py => Int = "int"
 type Py => Str = "str"
 type Py => Bool = "bool"
 type Py => (List a) = "list" a
-type Py => (Vector n a) = "list" a
 type Py => (Array a) = "list" a
 type Py => (Deque a) = "list" a
-type Py => (Matrix m n a) = "list" a
-type Py => (Tensor1 d1 a) = "numpy.ndarray" a
-type Py => (Tensor2 d1 d2 a) = "numpy.ndarray" a
-type Py => (Tensor3 d1 d2 d3 a) = "numpy.ndarray" a
-type Py => (Tensor4 d1 d2 d3 d4 a) = "numpy.ndarray" a
-type Py => (Tensor5 d1 d2 d3 d4 d5 a) = "numpy.ndarray" a
+type Py => (Vector (n :: Nat) a) = "list" a
+type Py => (Matrix (m :: Nat) (n :: Nat) a) = "list" a
+type Py => (Tensor1 (d1 :: Nat) a) = "numpy.ndarray" a
+type Py => (Tensor2 (d1 :: Nat) (d2 :: Nat) a) = "numpy.ndarray" a
+type Py => (Tensor3 (d1 :: Nat) (d2 :: Nat) (d3 :: Nat) a) = "numpy.ndarray" a
+type Py => (Tensor4 (d1 :: Nat) (d2 :: Nat) (d3 :: Nat) (d4 :: Nat) a) = "numpy.ndarray" a
+type Py => (Tensor5 (d1 :: Nat) (d2 :: Nat) (d3 :: Nat) (d4 :: Nat) (d5 :: Nat) a) = "numpy.ndarray" a
 type Py => (Tuple2 a b) = "tuple" a b
 type Py => (Tuple3 a b c) = "tuple" a b c
 type Py => (Tuple4 a b c d) = "tuple" a b c d
