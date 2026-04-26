@@ -23,14 +23,6 @@ def morloc_eq(x, y):
 def morloc_le(x, y):
     return x <= y
 
-# --- Control flow ---
-
-def morloc_branch(cond, fa, fb, x):
-    if cond(x):
-        return fa(x)
-    else:
-        return fb(x)
-
 # --- Arithmetic operations ---
 
 def morloc_neg(x):
