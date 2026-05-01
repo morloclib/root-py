@@ -10,13 +10,20 @@ type Py => Bool = "bool"
 type Py => (List a) = "list" a
 type Py => (Array a) = "list" a
 type Py => (Deque a) = "list" a
-type Py => (Vector (n :: Nat) a) = "list" a
-type Py => (Matrix (m :: Nat) (n :: Nat) a) = "list" a
-type Py => (Tensor1 (d1 :: Nat) a) = "numpy.ndarray" a
-type Py => (Tensor2 (d1 :: Nat) (d2 :: Nat) a) = "numpy.ndarray" a
-type Py => (Tensor3 (d1 :: Nat) (d2 :: Nat) (d3 :: Nat) a) = "numpy.ndarray" a
-type Py => (Tensor4 (d1 :: Nat) (d2 :: Nat) (d3 :: Nat) (d4 :: Nat) a) = "numpy.ndarray" a
-type Py => (Tensor5 (d1 :: Nat) (d2 :: Nat) (d3 :: Nat) (d4 :: Nat) (d5 :: Nat) a) = "numpy.ndarray" a
+
+-- Fixed-width numeric types are distinct base types (different wire forms)
+-- but share Python's runtime types. The wire serializer handles each width;
+-- Python's `int`/`float` accept any of them at runtime.
+type Py => Float64 = "float"
+type Py => Float32 = "float"
+type Py => Int64   = "int"
+type Py => Int32   = "int"
+type Py => Int16   = "int"
+type Py => Int8    = "int"
+type Py => UInt64  = "int"
+type Py => UInt32  = "int"
+type Py => UInt16  = "int"
+type Py => UInt8   = "int"
 type Py => (Tuple2 a b) = "tuple" a b
 type Py => (Tuple3 a b c) = "tuple" a b c
 type Py => (Tuple4 a b c d) = "tuple" a b c d
