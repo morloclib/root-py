@@ -8,6 +8,7 @@ type Py => Int = "int"
 type Py => Str = "str"
 type Py => Bool = "bool"
 type Py => (List a) = "list" a
+type Py => (List UInt8) = "bytes" UInt8
 type Py => (Array a) = "list" a
 type Py => (Deque a) = "list" a
 
