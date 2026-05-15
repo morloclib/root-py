@@ -230,15 +230,12 @@ def morloc_groupSort(xs):
     order.sort()
     return [(k, groups[k]) for k in order]
 
+# half-open interval [a, b), like Python's range and root's slice
 def morloc_range(a, b):
-    if a > b:
-        return []
-    return list(range(a, b + 1))
+    return list(range(a, b))
 
 def morloc_rangeStep(a, b, step):
-    if a > b:
-        return []
-    return list(range(a, b + 1, step))
+    return list(range(a, b, step))
 
 # --- Readable operations ---
 
