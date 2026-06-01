@@ -1,6 +1,12 @@
 import math
 import functools
 
+try:
+    import numpy as _np
+    _HAS_NUMPY = True
+except ImportError:
+    _HAS_NUMPY = False
+
 def morloc_idpy(x):
     return x
 
@@ -17,8 +23,32 @@ def morloc_or(x, y):
 
 # --- Comparison operations ---
 
+# Structural equality returning a single bool. The naked `x == y` returns
+# element-wise masks on numpy arrays (and on some array-like records),
+# which violates the Eq class contract that `(==)` yields a single Bool.
+# Walk both values in lockstep, reducing arrays / lists / tuples / dicts
+# to a single bool via shape-and-content comparison.
 def morloc_eq(x, y):
-    return x == y
+    if _HAS_NUMPY and (isinstance(x, _np.ndarray) or isinstance(y, _np.ndarray)):
+        xa = _np.asarray(x)
+        ya = _np.asarray(y)
+        if xa.shape != ya.shape:
+            return False
+        if xa.dtype == object or ya.dtype == object:
+            return all(morloc_eq(xa.flat[i], ya.flat[i]) for i in range(xa.size))
+        return bool(_np.array_equal(xa, ya))
+    if isinstance(x, (tuple, list)) and isinstance(y, (tuple, list)):
+        if len(x) != len(y):
+            return False
+        return all(morloc_eq(a, b) for a, b in zip(x, y))
+    if isinstance(x, dict) and isinstance(y, dict):
+        if x.keys() != y.keys():
+            return False
+        return all(morloc_eq(x[k], y[k]) for k in x)
+    result = x == y
+    if _HAS_NUMPY and isinstance(result, _np.ndarray):
+        return bool(_np.all(result))
+    return bool(result)
 
 def morloc_le(x, y):
     return x <= y
@@ -60,11 +90,22 @@ def morloc_ln(x):
 
 # --- Sequence operations ---
 
+def morloc_to_index(x):
+    # One helper covers every IndexLike instance because Python's int is
+    # arbitrary-precision. UInt64 values above Int64::MAX round-trip safely at
+    # the Python level; misinterpretation only occurs if they cross into a
+    # typed pool (C++/R) under the same wire-level Int64 tag.
+    return int(x)
+
 def morloc_at(i, xs):
     return xs[i]
 
-def morloc_slice(i, j, xs):
-    return xs[i:j]
+def morloc_slice(start, stop, step, xs):
+    # Python's slice() handles None for any of start/stop/step and chooses
+    # defaults from the step's sign, matching the Sliceable contract.
+    if step == 0:
+        raise ValueError("slice step cannot be zero")
+    return xs[start:stop:step]
 
 def morloc_reverse(xs):
     return list(reversed(xs))
@@ -261,15 +302,4 @@ def morloc_read_bool(s):
         return False
     return None
 
-# --- Sequence conversions ---
-# In Python, all sequence types map to list, so these are identity functions
-
-def morloc_toDeque(xs):
-    return list(xs)
-
-def morloc_toVector(xs):
-    return list(xs)
-
-def morloc_toArray(xs):
-    return list(xs)
 
