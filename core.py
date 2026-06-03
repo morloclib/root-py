@@ -95,9 +95,20 @@ def morloc_to_index(x):
     # arbitrary-precision. UInt64 values above Int64::MAX round-trip safely at
     # the Python level; misinterpretation only occurs if they cross into a
     # typed pool (C++/R) under the same wire-level Int64 tag.
-    return int(x)
+    #
+    # Returns Optional[int]: None passes through so slicer bounds can be
+    # left blank (the desugar emits `(Null :: ?Int64)` for an empty
+    # position, and a user expression evaluating to None composes the
+    # same way). Non-None values cast to Python int.
+    return None if x is None else int(x)
 
 def morloc_at(i, xs):
+    # __access_index__ takes ?Int64 to match __to_index__'s return shape,
+    # but a Null index has no semantic meaning at runtime -- callers can
+    # only reach this with an explicit Optional-typed index expression
+    # that resolved to None.
+    if i is None:
+        raise IndexError("morloc_at: index is Null")
     return xs[i]
 
 def morloc_slice(start, stop, step, xs):
