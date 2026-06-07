@@ -41,7 +41,6 @@ source Py from "core.py"
     , "morloc_and" as (&&)
     , "morloc_or" as (||)
     , "morloc_zipWith" as zipWith
-    , "morloc_reverse" as reverse
     , "morloc_sort" as sort
     , "morloc_sortBy" as sortBy
     , "morloc_filter" as filter

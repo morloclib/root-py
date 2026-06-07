@@ -118,9 +118,6 @@ def morloc_slice(start, stop, step, xs):
         raise ValueError("slice step cannot be zero")
     return xs[start:stop:step]
 
-def morloc_reverse(xs):
-    return list(reversed(xs))
-
 def morloc_sort(xs):
     return sorted(xs)
 
