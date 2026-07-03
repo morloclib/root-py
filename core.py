@@ -10,6 +10,9 @@ except ImportError:
 def morloc_idpy(x):
     return x
 
+def morloc_size(x):
+    return len(x)
+
 # --- Boolean operations ---
 
 def morloc_not(x):
