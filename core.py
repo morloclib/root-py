@@ -91,6 +91,38 @@ def morloc_pow(x, y):
 def morloc_ln(x):
     return math.log(x)
 
+def morloc_to_real(x):
+    return float(x)
+
+# --- PartialInto helpers ---
+#
+# Python has one arbitrary-precision int and one 64-bit float; the fixed-width
+# morloc types live only in the wire form. So each try_* function does its own
+# range check against the morloc target width. Float inputs must be finite and
+# integer-valued; non-integer or non-finite floats fail.
+
+def _morloc_try_int(x, lo, hi):
+    if isinstance(x, float):
+        if not math.isfinite(x):
+            return None
+        ix = int(x)
+        if ix != x:
+            return None
+        x = ix
+    if lo <= x <= hi:
+        return x
+    return None
+
+def morloc_try_u8(x):  return _morloc_try_int(x, 0, 255)
+def morloc_try_u16(x): return _morloc_try_int(x, 0, 65535)
+def morloc_try_u32(x): return _morloc_try_int(x, 0, 4294967295)
+def morloc_try_u64(x): return _morloc_try_int(x, 0, 18446744073709551615)
+def morloc_try_i8(x):  return _morloc_try_int(x, -128, 127)
+def morloc_try_i16(x): return _morloc_try_int(x, -32768, 32767)
+def morloc_try_i32(x): return _morloc_try_int(x, -2147483648, 2147483647)
+def morloc_try_i64(x): return _morloc_try_int(x, -9223372036854775808, 9223372036854775807)
+def morloc_try_int(x): return _morloc_try_int(x, -2147483648, 2147483647)
+
 # --- Sequence operations ---
 
 def morloc_to_index(x):
