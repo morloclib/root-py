@@ -18,12 +18,6 @@ def morloc_size(x):
 def morloc_not(x):
     return not x
 
-def morloc_and(x, y):
-    return x and y
-
-def morloc_or(x, y):
-    return x or y
-
 # --- Comparison operations ---
 
 # Structural equality returning a single bool. The naked `x == y` returns

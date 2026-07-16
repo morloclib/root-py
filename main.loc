@@ -41,8 +41,8 @@ idpy :: a -> a
 source Py from "core.py"
     ( "morloc_idpy" as idpy
     , "morloc_not" as not
-    , "morloc_and" as (&&)
-    , "morloc_or" as (||)
+    , `and` as (&&)
+    , `or` as (||)
     , "morloc_zipWith" as zipWith
     , "morloc_sort" as sort
     , "morloc_sortBy" as sortBy
