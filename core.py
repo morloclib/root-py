@@ -93,19 +93,20 @@ def morloc_to_real(x):
 # Python has one arbitrary-precision int and one 64-bit float; the fixed-width
 # morloc types live only in the wire form. So each try_* function does its own
 # range check against the morloc target width. Float inputs must be finite and
-# integer-valued; non-integer or non-finite floats fail.
+# integer-valued; non-integer or non-finite floats fail. Failure raises so the
+# <Err> effect propagates to the nearest @catch.
 
 def _morloc_try_int(x, lo, hi):
     if isinstance(x, float):
         if not math.isfinite(x):
-            return None
+            raise ValueError(f"cannot convert non-finite float {x!r} to integer")
         ix = int(x)
         if ix != x:
-            return None
+            raise ValueError(f"cannot convert non-integer float {x!r} to integer")
         x = ix
     if lo <= x <= hi:
         return x
-    return None
+    raise ValueError(f"value {x!r} out of range [{lo}, {hi}]")
 
 def morloc_try_u8(x):  return _morloc_try_int(x, 0, 255)
 def morloc_try_u16(x): return _morloc_try_int(x, 0, 65535)
@@ -314,29 +315,5 @@ def morloc_range(a, b):
 
 def morloc_rangeStep(a, b, step):
     return list(range(a, b, step))
-
-# --- Readable operations ---
-
-def morloc_read_int(s):
-    try:
-        return int(s)
-    except (ValueError, TypeError):
-        return None
-
-def morloc_read_real(s):
-    try:
-        return float(s)
-    except (ValueError, TypeError):
-        return None
-
-def morloc_read_str(s):
-    return s
-
-def morloc_read_bool(s):
-    if s in ("true", "True", "TRUE"):
-        return True
-    if s in ("false", "False", "FALSE"):
-        return False
-    return None
 
 

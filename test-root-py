@@ -1,0 +1,5 @@
+#!/bin/sh
+# morloc-program v0.93.0
+exec morloc-nexus run "$0" "$@"
+### MANIFEST ###
+{"name":"test-root-py","build":{"path":"/home/z/projects/morloc-core/morloc-workspace/lib/stdlib/root-py","time":1784399917,"morloc_version":"0.93.0"},"pools":[{"lang":"py","exec":["python3","/home/z/projects/morloc-core/morloc-workspace/lib/stdlib/root-py/pools/test-root-py/pool.py"],"socket":"pipe-py","pool_hash":"20d710a4a3360291","allow_string_null":true,"metadata":{}}],"commands":[{"name":"test","type":"remote","mid":1,"pool":0,"needed_pools":[0],"desc":[],"args":[],"return":{"schema":"b","type":"Bool","desc":[],"constraints":[],"metadata":{}},"constraints":[],"internal":false,"terminals":[],"metadata":{},"group":null}],"groups":[],"desc":[],"epilogues":[],"unsafe_skip_null_check":false,"inline_size":null,"no_shm":false,"tmpdir":null,"run_log":null,"capabilities":["log"],"metadata":{}}
