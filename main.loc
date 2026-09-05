@@ -24,9 +24,9 @@ type Py => U64  = "int"
 type Py => U32  = "int"
 type Py => U16  = "int"
 type Py => U8   = "int"
-type Py => (IFile a) = "int"
-type Py => (IStream a) = "int"
-type Py => (OStream a) = "int"
+type Py => (IFile a) = "int" a
+type Py => (IStream a) = "int" a
+type Py => (OStream a) = "int" a
 type Py => (Tuple2 a b) = "tuple" a b
 type Py => (Tuple3 a b c) = "tuple" a b c
 type Py => (Tuple4 a b c d) = "tuple" a b c d
