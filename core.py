@@ -1,12 +1,6 @@
 import math
 import functools
 
-try:
-    import numpy as _np
-    _HAS_NUMPY = True
-except ImportError:
-    _HAS_NUMPY = False
-
 def morloc_idpy(x):
     return x
 
@@ -20,20 +14,7 @@ def morloc_not(x):
 
 # --- Comparison operations ---
 
-# Structural equality returning a single bool. The naked `x == y` returns
-# element-wise masks on numpy arrays (and on some array-like records),
-# which violates the Eq class contract that `(==)` yields a single Bool.
-# Walk both values in lockstep, reducing arrays / lists / tuples / dicts
-# to a single bool via shape-and-content comparison.
 def morloc_eq(x, y):
-    if _HAS_NUMPY and (isinstance(x, _np.ndarray) or isinstance(y, _np.ndarray)):
-        xa = _np.asarray(x)
-        ya = _np.asarray(y)
-        if xa.shape != ya.shape:
-            return False
-        if xa.dtype == object or ya.dtype == object:
-            return all(morloc_eq(xa.flat[i], ya.flat[i]) for i in range(xa.size))
-        return bool(_np.array_equal(xa, ya))
     if isinstance(x, (tuple, list)) and isinstance(y, (tuple, list)):
         if len(x) != len(y):
             return False
@@ -43,8 +24,6 @@ def morloc_eq(x, y):
             return False
         return all(morloc_eq(x[k], y[k]) for k in x)
     result = x == y
-    if _HAS_NUMPY and isinstance(result, _np.ndarray):
-        return bool(_np.all(result))
     return bool(result)
 
 def morloc_le(x, y):
