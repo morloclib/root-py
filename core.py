@@ -37,6 +37,16 @@ def morloc_neg(x):
 def morloc_abs(x):
     return abs(x)
 
+# Integer `//` and `%` are C's: the quotient truncates toward zero and the
+# remainder takes the dividend's sign. A zero divisor raises ZeroDivisionError.
+def morloc_int_div(x, y):
+    q = abs(x) // abs(y)
+    return q if (x < 0) == (y < 0) else -q
+
+def morloc_int_mod(x, y):
+    r = abs(x) % abs(y)
+    return -r if x < 0 else r
+
 def morloc_add(a, b):
     return a + b
 
