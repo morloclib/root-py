@@ -1,5 +1,6 @@
 import math
 import functools
+import itertools
 
 def morloc_idpy(x):
     return x
@@ -306,3 +307,9 @@ def morloc_rangeStep(a, b, step):
     return list(range(a, b, step))
 
 
+def morloc_str_mconcat(xs):
+    return "".join(xs)
+
+
+def morloc_list_mconcat(xss):
+    return list(itertools.chain.from_iterable(xss))

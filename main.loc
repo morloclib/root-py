@@ -8,7 +8,6 @@ type Py => Int = "int"
 type Py => Str = "str"
 type Py => Bool = "bool"
 type Py => (List a) = "list" a
-type Py => (List U8) = "bytes" U8
 type Py => (Deque a) = "list" a
 
 -- Fixed-width numeric types are distinct base types (different wire forms)
@@ -137,6 +136,8 @@ instance Semigroup Str where
 
 instance Monoid Str where
   mempty = ""
+  %inline
+  source Py from "core.py" ("morloc_str_mconcat" as mconcat)
 
 
 -- List instances
@@ -149,6 +150,8 @@ instance Semigroup (List a)
 instance Monoid (List a)
        , Monoid (Deque a) where
   mempty = []
+  %inline
+  source Py from "core.py" ("morloc_list_mconcat" as mconcat)
 
 instance Functor List
        , Functor Deque where
